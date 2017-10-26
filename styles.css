@@ -1,6 +1,31 @@
-#mainTableContainer {
+.skinny {
+	margin: 0px;
+}
+
+.maintable {
 	width: 90%;
-	height: 85%;
 	margin: 0 auto;
-	overflow: auto;
+}
+
+h1, h5 {
+	text-align: center;
+}
+
+.glyphicon {
+	display: block;
+	text-align: center;
+	cursor: pointer;
+}
+
+.tableHeader {
+	display: block;
+	text-align: center;
+}
+
+#pageinput {
+	width: 50px;
+}
+
+#maxpageinput {
+	width: 50px;
 }

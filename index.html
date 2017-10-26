@@ -1,13 +1,6 @@
-<!-- TODO:
-1. Move filters into list
-2. Make list headers static
-3. Implement sorting
-4. Fix date display
-5. More nuanced filtering
- -->
 <html>
 <head>
-    <title>Motions</title>
+    <title>Motion Search</title>
     <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="styles.css">
@@ -17,46 +10,42 @@
 <body>
     <script src="index.js"></script>
     <div ng-app="mainApp" ng-controller="mainController">
-        <h1>Motions</h1>
-        <div class="row" ng-repeat="header in colData">
-            <div class="col-md-1"></div>
-            <div class="col-md-2">{{ header.name }}</div>
-            <div class="col-md-3">
-                <input type="text" ng-model="filters[header.name]">
-            </div>
-            <div class="col-md-2">
-                {{ filters[header.name] }}
-            </div>
+        <h1>Motion Search</h1>
+        <h5>Motions source (and awesome site) at <a href="hellomotions.com">hellomotions.com</a></h5>
+        <br><br><br>
+        <div class="maintable">
+            <form class="form-inline">
+                <button ng-click="updatePagination(1)" type="button" class="btn btn-secondary">&lt;&lt;</button>
+                <button ng-click="updatePagination(page-1)" type="button" class="btn btn-secondary">&lt;</button>
+                <div class="input-group mb-2 mr-sm-2 mb-sm-0">
+                    <input type="text" id="pageinput" class="form-control" ng-model="page" ng-change="updatePagination(page)">
+                    <div class="input-group-addon">/{{ maxPage }}</div>
+                </div>
+                <button ng-click="updatePagination(page+1)" type="button" class="btn btn-secondary">&gt;</button>
+                <button ng-click="updatePagination(maxPage)" type="button" class="btn btn-secondary">&gt;&gt;</button>
+                <div class="input-group mb-2 mr-sm-2 mb-sm-0" style="margin-left: 50px">
+                    <div class="input-group-addon">Motions/Page</div>
+                    <input type="text" id="maxpageinput" class="form-control" ng-model="page_size" ng-change="updateTableData()">
+                </div>
+            </form>
         </div>
-        <div class="row">
-            <div class="col-md-1"></div>
-            <div class="col-md-1">
-                <button type="button" ng-click="updateTableData()" class="btn btn-primary">Update</button>
-            </div>
-        </div>
-        <div id="mainTableContainer">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th ng-repeat="header in colData" class="col-lg-{{ header.width }}">{{ header.name }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="m in current_data">
-                            <td ng-repeat="header in colData">{{ getTableStr(m[header.name]) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-2">
-                <button ng-click="updatePagination(page-1)" type="button" class="btn btn-primary">&lt;</button>
-                {{ page }} / {{ maxPage }}
-                <button ng-click="updatePagination(page+1)" type="button" class="btn btn-primary">&gt;</button>
-            </div>
+        <div class="table-responsive maintable">
+            <table class="table table-striped">
+                <theadclass="thead-default">
+                    <tr>
+                        <th ng-repeat="header in colData" class="col-lg-{{ header.width }}">
+                            <span class="tableHeader">{{ header.name }}</span>
+                            <input type="text" class="form-control skinny" ng-model="headerData[header.name].filter" ng-change="updateTableData()">
+                            <span class="glyphicon glyphicon-{{ getGlyph(header.name) }}" ng-click="sortTable(header.name)"></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="m in current_data">
+                        <td ng-repeat="header in colData">{{ getTableStr(m[header.name]) }}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </body>
